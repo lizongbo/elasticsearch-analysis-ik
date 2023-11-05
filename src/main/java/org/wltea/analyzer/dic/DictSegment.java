@@ -19,15 +19,12 @@ import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
+import org.wltea.analyzer.core.CharacterUtil;
+
 /**
  * 词典树分段，表示词典树的一个分枝
  */
 class DictSegment implements Comparable<DictSegment> {
-
-    /**
-     * 把Character对象都缓存起来
-     */
-    private static final Character[] cache = new Character[Character.MAX_VALUE + 1];
 
 
     //公用字典表，存储汉字
@@ -51,11 +48,7 @@ class DictSegment implements Comparable<DictSegment> {
     private int nodeState;
 
 
-    static {
-        for (int i = Character.MIN_VALUE; i <= Character.MAX_VALUE; i++) {
-            cache[i] = Character.valueOf((char) i);
-        }
-    }
+
 
     DictSegment(Character nodeChar) {
         if (nodeChar == null) {
@@ -71,7 +64,7 @@ class DictSegment implements Comparable<DictSegment> {
      * @return
      */
     public static Character valueOf(char c) {
-        return cache[c];
+        return CharacterUtil.valueOf(c);
     }
 
     Character getNodeChar() {

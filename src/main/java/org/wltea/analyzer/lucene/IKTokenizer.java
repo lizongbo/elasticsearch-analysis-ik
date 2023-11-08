@@ -109,7 +109,7 @@ public final class IKTokenizer extends Tokenizer {
     public void end() throws IOException {
         super.end();
         // set final offset
-        int finalOffset = correctOffset(this.endPosition);
+        int finalOffset = correctOffset(this.endPosition + _IKImplement.getLastUselessCharNum());
         offsetAtt.setOffset(finalOffset, finalOffset);
         posIncrAtt.setPositionIncrement(posIncrAtt.getPositionIncrement() + skippedPositions);
     }

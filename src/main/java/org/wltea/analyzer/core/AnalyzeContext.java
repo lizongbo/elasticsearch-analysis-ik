@@ -50,7 +50,8 @@ class AnalyzeContext {
     private int cursor;
     //最近一次读入的,可处理的字串长度
     private int available;
-
+    //末尾非CJK字符数目
+    private int lastUselessCharNum;
 
     //子分词器锁
     //该集合非空，说明有子分词器在占用segmentBuff
@@ -107,6 +108,7 @@ class AnalyzeContext {
         if (this.buffOffset == 0) {
             //首次读取reader
             readCount = reader.read(segmentBuff);
+            this.lastUselessCharNum = 0;
         } else {
             int offset = this.available - this.cursor;
             if (offset > 0) {
@@ -242,8 +244,11 @@ class AnalyzeContext {
             //跳过非CJK字符
             if (CharacterUtil.CHAR_USELESS == this.charTypes[index]) {
                 index++;
+                this.lastUselessCharNum++;
                 continue;
             }
+            // 清空数值
+            this.lastUselessCharNum = 0;
             //从pathMap找出对应index位置的LexemePath
             LexemePath path = this.pathMap.get(index);
             if (path != null) {
@@ -353,6 +358,15 @@ class AnalyzeContext {
         }
         return result;
     }
+
+
+    /**
+     * 返回末尾非CJK字符字符数目
+     */
+    public int getLastUselessCharNum() {
+        return this.lastUselessCharNum;
+    }
+
 
     /**
      * 重置分词上下文状态

@@ -5,17 +5,17 @@
     <name>elasticsearch-analysis-ik</name>
     <modelVersion>4.0.0</modelVersion>
     <groupId>org.elasticsearch</groupId>
-    <artifactId>elasticsearch-analysis-ik</artifactId>
+    <artifactId>elasticsearch-analysis-lzbik</artifactId>
     <version>${elasticsearch.version}</version>
     <packaging>jar</packaging>
     <description>IK Analyzer for Elasticsearch</description>
     <inceptionYear>2011</inceptionYear>
 
     <properties>
-        <elasticsearch.version>8.10.4</elasticsearch.version>
+        <elasticsearch.version>8.11.0</elasticsearch.version>
         <maven.compiler.target>1.8</maven.compiler.target>
         <elasticsearch.assembly.descriptor>${project.basedir}/src/main/assemblies/plugin.xml</elasticsearch.assembly.descriptor>
-        <elasticsearch.plugin.name>analysis-ik</elasticsearch.plugin.name>
+        <elasticsearch.plugin.name>analysis-lzbik</elasticsearch.plugin.name>
         <elasticsearch.plugin.classname>org.elasticsearch.plugin.analysis.ik.AnalysisIkPlugin</elasticsearch.plugin.classname>
         <elasticsearch.plugin.jvm>true</elasticsearch.plugin.jvm>
         <tests.rest.load_packaged>false</tests.rest.load_packaged>

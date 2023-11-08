@@ -15,11 +15,12 @@
  */
 package org.wltea.analyzer.dic;
 
+import org.wltea.analyzer.core.CharacterUtil;
+
 import java.util.Arrays;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
-import org.wltea.analyzer.core.CharacterUtil;
 
 /**
  * 词典树分段，表示词典树的一个分枝

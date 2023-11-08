@@ -922,7 +922,7 @@ public class CharacterUtil {
             input = (char) (input - 65248);
         } else if (input >= 'A' && input <= 'Z' && enableLowercase) {
             input += 32;
-        }else if(enableCht2Chs){
+        } else if (enableCht2Chs) {
             input = (char) cht2chs(input);
         }
         return input;

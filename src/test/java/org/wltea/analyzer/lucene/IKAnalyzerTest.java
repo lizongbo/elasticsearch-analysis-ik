@@ -4,6 +4,8 @@ import java.io.File;
 import java.io.IOException;
 import java.net.URL;
 import java.nio.file.Path;
+import java.text.Normalizer;
+import java.text.Normalizer.Form;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +34,10 @@ public class IKAnalyzerTest {
         File esRootDir = new File(url.getFile()).getParentFile().getParentFile().getParentFile();
         logger.info("mock elasticsearch root dir={}", esRootDir);
         Settings settings = Settings.builder()
-            .put("use_smart", "true")
+            .put("use_smart", "fasle")
             .put("enable_lowercase", "true")
             .put("enable_remote_dict", "false")
+            .put("enable_cht2chs", "true")
             .put("path.home", esRootDir.getAbsolutePath())
             .build();
         Environment env = new Environment(settings, new File(esRootDir, "config").toPath());
@@ -44,7 +47,7 @@ public class IKAnalyzerTest {
     @Test
     public void testCreateComponents() throws IOException {
         IKAnalyzer ikAnalyzerUnderTest = new IKAnalyzer(mockConfiguration);
-        TokenStream tokenStream = ikAnalyzerUnderTest.tokenStream("fieldName", "测试一下分词效果，最近流行AA制，不知道是什么意思");
+        TokenStream tokenStream = ikAnalyzerUnderTest.tokenStream("fieldName", "测试一下分词效果，最近流行AA制，不知道是什么意思,再測試一下繁體分詞");
         tokenStream.reset();
         CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
         while (tokenStream.incrementToken()) {
@@ -54,12 +57,32 @@ public class IKAnalyzerTest {
     }
 
     @Test
+    public void testIKAnalyzer() throws IOException {
+
+        for (File f : new File("D:\\bitcometdown").listFiles()) {
+            if (f.isDirectory()) {
+                String name = f.getName();
+                IKAnalyzer ikAnalyzerUnderTest = new IKAnalyzer(mockConfiguration);
+                TokenStream tokenStream = ikAnalyzerUnderTest.tokenStream("fileName", name);
+                tokenStream.reset();
+                CharTermAttribute charTermAttribute = tokenStream.addAttribute(CharTermAttribute.class);
+                while (tokenStream.incrementToken()) {
+                    System.out.println(name+"================="+charTermAttribute);
+                }
+                ikAnalyzerUnderTest.close();
+            }
+        }
+
+        String string="不知道是什么意思,再測試一下繁體分詞";
+        System.out.println(Normalizer.normalize(string, Form.NFKC));
+    }
+    @Test
     public void testGB18030_2022() throws IOException {
         List<String> list = new ArrayList<>();
         list.add(codePointsToString(0x20000));
         list.add(codePointsToString(0x2A6DF));
         Dictionary.getSingleton().addWords(list);
-        StringBuilder sb = new StringBuilder("汉字");
+        StringBuilder sb = new StringBuilder("汉字[特洛伊].Troy.Directors.Cut.2004.Blu-ray.1080p.VC-1.LPCM5.1-CMCT");
         sb.appendCodePoint(0x3400).appendCodePoint(0x4DBF);
         sb.appendCodePoint(0x20000).appendCodePoint(0x2A6DF);
         sb.appendCodePoint(0x2A700).appendCodePoint(0x2B739);
